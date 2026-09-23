@@ -855,7 +855,7 @@ GameObject:
   - component: {fileID: 571283277}
   - component: {fileID: 571283276}
   m_Layer: 0
-  m_Name: Ghost3Controller
+  m_Name: GhostObject3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1308,7 +1308,7 @@ GameObject:
   - component: {fileID: 932281624}
   - component: {fileID: 932281623}
   m_Layer: 0
-  m_Name: Ghost4Controller
+  m_Name: GhostObject4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1422,7 +1422,7 @@ GameObject:
   - component: {fileID: 1019051218}
   - component: {fileID: 1019051217}
   m_Layer: 0
-  m_Name: GhostController
+  m_Name: GhostObject1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1627,7 +1627,7 @@ GameObject:
   - component: {fileID: 1430203738}
   - component: {fileID: 1430203740}
   m_Layer: 0
-  m_Name: Ghost2Controller
+  m_Name: GhostObject2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
