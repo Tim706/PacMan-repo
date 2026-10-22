@@ -1,2 +1,18 @@
 fileFormatVersion: 2
 guid: 277250bea9c36464fa61644b3694bede
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - SFXSource: {instanceID: 0}
+  - walkingClip: {fileID: 8300000, guid: 2622333c1e86eb14f85023139898cad1, type: 3}
+  - cleaningClip: {fileID: 8300000, guid: e4c6101a5a4bc7d4fa331a1121bafa36, type: 3}
+  - cleanGoblinClip: {fileID: 8300000, guid: 46d03d2e6a7d89c43afce10a21b439ac, type: 3}
+  - gainWaterClip: {fileID: 8300000, guid: c448d9e30a9d1a84383f3a89004432ed, type: 3}
+  - wallHitClip: {fileID: 8300000, guid: 111f5b686f6144c478e08358d2718a18, type: 3}
+  - deathClip: {fileID: 8300000, guid: 65ec677f8654f4a42abbf082a3a9e672, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

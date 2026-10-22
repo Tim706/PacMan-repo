@@ -1,2 +1,17 @@
 fileFormatVersion: 2
 guid: 0ed42cc54c4722648bd201ea9312d2d2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - music: {instanceID: 0}
+  - mainMenu: {fileID: 8300000, guid: 6bcd96db39268bc47b707dd13195297e, type: 3}
+  - sceneStart: {fileID: 8300000, guid: 45bd5fd631cc1ee4cb7d7638ed6431ec, type: 3}
+  - goblinNormal: {fileID: 8300000, guid: c396c7f2cdb85e34e97c4efba16a1bf4, type: 3}
+  - goblinScared: {fileID: 8300000, guid: e9d0f58da18a3be4c8eaf6f4f86de3ad, type: 3}
+  - goblinDead: {fileID: 8300000, guid: 5127d3fe9dba9fc449fde9d17f3538b2, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
