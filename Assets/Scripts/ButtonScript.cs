@@ -14,6 +14,11 @@ public class ButtonScript : MonoBehaviour
         SceneManager.LoadScene("OtherScene");
     }
 
+    public void LevelStartScreen()
+    {
+        SceneManager.LoadScene("StartScene");
+    }
+
     void Start()
     {
 
