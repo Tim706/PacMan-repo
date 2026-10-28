@@ -75,9 +75,10 @@ public class LevelGenerator : MonoBehaviour
     
 	private static int GetTile(int row, int col)
 	{
-		 if (row < 0 || row >= Rows || col < 0 || col >= Cols)
-            return -1;
-
+		if (row < 0 || row >= Rows || col < 0 || col >= Cols)
+		{
+			return -1;
+		}      
         return levelMap[row, col];
 	}
 

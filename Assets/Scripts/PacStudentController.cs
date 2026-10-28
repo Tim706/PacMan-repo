@@ -23,7 +23,11 @@ public class PacStudentController : MonoBehaviour
     private enum Direction { Right, Left, Up, Down }
     private Direction lastInput = Direction.Right;
     private Direction currentInput = Direction.Right;
+    
     private bool hasHitWall = false;
+    private int tunnelLockRemaining = 0;
+    private Direction tunnelLockDirection;
+    private bool tunnelLocked = false;
     
     void Start()
     {
@@ -76,7 +80,7 @@ public class PacStudentController : MonoBehaviour
             return;
         }
 
-        if (!hasHitWall)
+        if (!hasHitWall && !tunnelLocked)
         {
             soundEffects.PlayWallHit();
             hasHitWall = true;
@@ -87,6 +91,14 @@ public class PacStudentController : MonoBehaviour
 
     bool TryMoveDirection(Direction dir)
     {
+
+        tunnelLocked = false;
+        if (tunnelLockRemaining > 0 && dir == OppositeDirection(tunnelLockDirection))
+        {
+            tunnelLocked = true;
+            return false;
+        }
+        
         int newRow = currentRow;
         int newCol = currentCol;
 
@@ -98,22 +110,62 @@ public class PacStudentController : MonoBehaviour
             case Direction.Right: newCol += 1; break;
         }
 
+        bool isTunnelRow = (currentRow == 14 || currentRow == 15);
+
+        if (isTunnelRow && dir == Direction.Left && newCol < 0)
+        {
+            currentCol = LevelGenerator.Cols;
+            newCol = currentCol - 1;
+            tunnelLockRemaining = 4;
+            tunnelLockDirection = Direction.Left;
+        }
+        
+        else if (isTunnelRow && dir == Direction.Right && newCol >= LevelGenerator.Cols)
+        {
+            currentCol = -1;
+            newCol = currentCol + 1;
+            tunnelLockRemaining = 4;
+            tunnelLockDirection = Direction.Right;
+        }
+
         if (!LevelGenerator.IsWalkablePlayer(newRow, newCol))
+        {
             return false;
+        }
+            
 
         if (!dustEffect.isPlaying)
+        {
             dustEffect.Play();
+        }
         
         targetRow = newRow;
         targetCol = newCol;
         isLerping = true;
         lerpProgress = 0.0f;
 
+        if (tunnelLockRemaining > 0)
+        {
+            tunnelLockRemaining--;
+        }
+        
         animator.speed = 1f;
         SetAnimatorDirection(dir);
         StartMovementFeedback(newRow, newCol);
 
         return true;
+    }
+    
+    private Direction OppositeDirection(Direction dir)
+    {
+        return dir switch
+        {
+            Direction.Up => Direction.Down,
+            Direction.Down => Direction.Up,
+            Direction.Left => Direction.Right,
+            Direction.Right => Direction.Left,
+            _ => dir
+        };
     }
 
     void ContinueLerp()
@@ -156,10 +208,14 @@ public class PacStudentController : MonoBehaviour
         bool aboutToEatPellet = (tile == 5 || tile == 6);
 
         if (aboutToEatPellet)
+        {
             soundEffects.PlayCleaning();
+        }
+
         else
+        {
             soundEffects.PlayMoving();
-        
+        }
     }
 
     void StopMovementFeedback()
