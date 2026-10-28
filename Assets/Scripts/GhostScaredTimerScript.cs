@@ -18,11 +18,11 @@ public class GhostScaredTimerScript : MonoBehaviour
     {
         if (scaredTimeRemaining <= 0)
         {
-            scaredTimer.gameObject.SetActive(false);
+            scaredTimer.enabled = false;
         }
         else
         {
-            scaredTimer.gameObject.SetActive(true);
+            scaredTimer.enabled = true;
             scaredTimer.text = scaredTimeRemaining.ToString();
         }
         

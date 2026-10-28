@@ -39,7 +39,7 @@ public class PacStudentController : MonoBehaviour
         lastInput = Direction.Right;
         currentInput = Direction.Right;
         SetAnimatorDirection(Direction.Right);
-        StopMovementFeedback();
+        //StopMovementFeedback();
 
     }
     
@@ -82,6 +82,7 @@ public class PacStudentController : MonoBehaviour
 
         if (!hasHitWall && !tunnelLocked)
         {
+            soundEffects.SFXSource.Stop();
             soundEffects.PlayWallHit();
             hasHitWall = true;
             animator.speed = 0f;
@@ -204,8 +205,7 @@ public class PacStudentController : MonoBehaviour
 
     void StartMovementFeedback(int nextRow, int nextCol)
     {
-        int tile = LevelGenerator.levelMap[nextRow, nextCol];
-        bool aboutToEatPellet = (tile == 5 || tile == 6);
+        bool aboutToEatPellet = LevelGenerator.HasPelletAt(nextRow, nextCol);
 
         if (aboutToEatPellet)
         {
@@ -218,10 +218,10 @@ public class PacStudentController : MonoBehaviour
         }
     }
 
-    void StopMovementFeedback()
-    {
-        soundEffects.SFXSource.Stop();
-        animator.speed = 0f;
-        dustEffect.Stop();
-    }
+    //void StopMovementFeedback()
+    //{
+        //soundEffects.SFXSource.Stop();
+        //animator.speed = 0f;
+        //dustEffect.Stop();
+    //}
 }

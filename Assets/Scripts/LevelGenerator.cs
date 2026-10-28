@@ -33,12 +33,20 @@ public class LevelGenerator : MonoBehaviour
 	public static float MapRight => OffsetX + (Cols - 1);
 	public static float MapTop => OffsetY;
 	public static float MapBot => OffsetY - (Rows - 1);
+	private static bool[,] eaten;
 
 	public static Vector3 GridToWorld(int row, int col) 
 	{
 		float worldX = OffsetX + col;
  		float worldY = OffsetY - row;
 		return new Vector3(worldX, worldY, 0f);
+	}
+
+	public static Vector2Int WorldToGrid(Vector3 worldPos)
+	{
+    	int col = Mathf.RoundToInt(worldPos.x - OffsetX);
+    	int row = Mathf.RoundToInt(OffsetY - worldPos.y);
+    	return new Vector2Int(row, col);
 	}
 
     void Awake()
@@ -55,6 +63,7 @@ public class LevelGenerator : MonoBehaviour
         int fullCols = qCols * 2;
 
         levelMap = new int[fullRows, fullCols];
+		eaten = new bool[Rows, Cols];
 
         for (int r = 0; r < qRows; r++)
         {
@@ -99,4 +108,16 @@ public class LevelGenerator : MonoBehaviour
         if (tile == 8) return comingFromInside;
 		return !IsWallType(tile);
     }
+
+	public static void MarkPelletEaten(int row, int col)
+	{	
+    	eaten[row, col] = true;
+	}
+
+public static bool HasPelletAt(int row, int col)
+	{
+    	int tile = GetTile(row, col);
+    	if (tile != 5 && tile != 6) return false;
+    	return !eaten[row, col];
+}
 }
