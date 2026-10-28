@@ -23,6 +23,7 @@ public class PacStudentController : MonoBehaviour
     private enum Direction { Right, Left, Up, Down }
     private Direction lastInput = Direction.Right;
     private Direction currentInput = Direction.Right;
+    private bool hasHitWall = false;
     
     void Start()
     {
@@ -65,15 +66,23 @@ public class PacStudentController : MonoBehaviour
         if (TryMoveDirection(lastInput))
         {
             currentInput = lastInput;
+            hasHitWall = false;
             return;
         }
         
         if (TryMoveDirection(currentInput))
         {
+            hasHitWall = false;
             return;
         }
-        
-        StopMovementFeedback();
+
+        if (!hasHitWall)
+        {
+            soundEffects.PlayWallHit();
+            hasHitWall = true;
+            animator.speed = 0f;
+            dustEffect.Stop();
+        }
     }
 
     bool TryMoveDirection(Direction dir)
