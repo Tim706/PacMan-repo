@@ -12,10 +12,6 @@ public class PacStudentController : MonoBehaviour
     
     [Header("DustParticle")]
     public ParticleSystem dustEffect;
-
-    //top left most tile placed at these coords, not 0,0
-    public float offsetX = -28.0573f;
-    public float offsetY = 25f;
     
     private int currentRow;
     private int currentCol;
@@ -33,7 +29,7 @@ public class PacStudentController : MonoBehaviour
         currentRow = 24;
         currentCol = 14;
         
-        transform.position = GridToWorld(currentRow, currentCol);
+        transform.position = LevelGenerator.GridToWorld(currentRow, currentCol);
         
         lastInput = Direction.Right;
         currentInput = Direction.Right;
@@ -115,8 +111,8 @@ public class PacStudentController : MonoBehaviour
     {
         lerpProgress += moveSpeed * Time.deltaTime;
 
-        Vector3 startPos = GridToWorld(currentRow, currentCol);
-        Vector3 endPos = GridToWorld(targetRow, targetCol);
+        Vector3 startPos = LevelGenerator.GridToWorld(currentRow, currentCol);
+        Vector3 endPos = LevelGenerator.GridToWorld(targetRow, targetCol);
 
         if (lerpProgress >= 1f)
         {
@@ -130,13 +126,6 @@ public class PacStudentController : MonoBehaviour
         {
             transform.position = Vector3.Lerp(startPos, endPos, lerpProgress);
         }
-    }
-
-    Vector3 GridToWorld(int row, int col)
-    {
-        float worldX = offsetX + col;
-        float worldY = offsetY - row;
-        return new Vector3(worldX, worldY, 0);
     }
 
     void SetAnimatorDirection(Direction dir)
@@ -161,8 +150,7 @@ public class PacStudentController : MonoBehaviour
             soundEffects.PlayCleaning();
         else
             soundEffects.PlayMoving();
-
-        // TODO: enable dust particle effect here
+        
     }
 
     void StopMovementFeedback()

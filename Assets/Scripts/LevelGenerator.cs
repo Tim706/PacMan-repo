@@ -26,6 +26,21 @@ public class LevelGenerator : MonoBehaviour
     public static int Rows => levelMap.GetLength(0);
     public static int Cols => levelMap.GetLength(1);
 
+	public const float  OffsetX = -28.0573f;
+	public const float  OffsetY = 25.0f;
+
+	public static float MapLeft => OffsetX;
+	public static float MapRight => OffsetX + (Cols - 1);
+	public static float MapTop => OffsetY;
+	public static float MapBot => OffsetY - (Rows - 1);
+
+	public static Vector3 GridToWorld(int row, int col) 
+	{
+		float worldX = OffsetX + col;
+ 		float worldY = OffsetY - row;
+		return new Vector3(worldX, worldY, 0f);
+	}
+
     void Awake()
     {
         BuildFullMap();
@@ -58,26 +73,29 @@ public class LevelGenerator : MonoBehaviour
         }
     }
     
+	private static int GetTile(int row, int col)
+	{
+		 if (row < 0 || row >= Rows || col < 0 || col >= Cols)
+            return -1;
+
+        return levelMap[row, col];
+	}
+
+	private static bool IsWallType(int tile) =>
+		tile == 1 || tile == 2 || tile == 3 || tile == 4 || tile == 7;
+
     public static bool IsWalkablePlayer(int row, int col)
     {
-        if (row < 0 || row >= Rows || col < 0 || col >= Cols)
-            return false;
-
-        int tile = levelMap[row, col];
-        
-        return tile != 1 && tile != 2 && tile != 3 && tile != 4 && tile != 7 && tile != 8;
+        int tile = GetTile(row, col);
+		if  (tile == -1) return false;
+        return !IsWallType(tile) && tile != 8;
     }
     
     public static bool IsWalkableGhost(int row, int col, bool comingFromInside)
     {
-        if (row < 0 || row >= Rows || col < 0 || col >= Cols)
-            return false;
-
-        int tile = levelMap[row, col];
-
-        if (tile == 8)
-            return comingFromInside;
-
-        return tile != 1 && tile != 2 && tile != 3 && tile != 4 && tile != 7;
+        int tile = GetTile(row, col);
+		if  (tile == -1) return false;
+        if (tile == 8) return comingFromInside;
+		return !IsWallType(tile);
     }
 }
