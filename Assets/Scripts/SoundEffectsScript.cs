@@ -55,11 +55,11 @@ public class SoundEffectsScript : MonoBehaviour
  
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) PlayMoving();
-        if (Input.GetKeyDown(KeyCode.A)) PlayCleaning();
-        if (Input.GetKeyDown(KeyCode.W)) PlayCleanGoblin();
-        if (Input.GetKeyDown(KeyCode.D)) PlayGainWater();
-        if (Input.GetKeyDown(KeyCode.E)) PlayWallHit();
-        if (Input.GetKeyDown(KeyCode.F)) PlayDeath();
+        //if (Input.GetKeyDown(KeyCode.Space)) PlayMoving();
+        //if (Input.GetKeyDown(KeyCode.A)) PlayCleaning();
+        //if (Input.GetKeyDown(KeyCode.W)) PlayCleanGoblin();
+        //if (Input.GetKeyDown(KeyCode.D)) PlayGainWater();
+        //if (Input.GetKeyDown(KeyCode.E)) PlayWallHit();
+        //if (Input.GetKeyDown(KeyCode.F)) PlayDeath();
     }
 }

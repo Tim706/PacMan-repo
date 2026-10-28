@@ -7,8 +7,11 @@ public class PacStudentController : MonoBehaviour
     public float moveSpeed = 5.0f;
     
     [Header("Animation/SFX")]
-    public Animtor animtor;
+    public Animator animator;
     public SoundEffectsScript soundEffects;
+    
+    [Header("DustParticle")]
+    public ParticleSystem dustEffect;
 
     //top left most tile placed at these coords, not 0,0
     public float offsetX = -28.0573f;
@@ -41,7 +44,7 @@ public class PacStudentController : MonoBehaviour
     
     void Update()
     {
-        Input();
+        ScanInput();
 
         if (!isLerping)
         {
@@ -53,7 +56,7 @@ public class PacStudentController : MonoBehaviour
         }
     }
 
-    void Input()
+    void ScanInput()
     {
         if (Input.GetKeyDown(KeyCode.W)) lastInput = Direction.Up;
         else if (Input.GetKeyDown(KeyCode.A)) lastInput = Direction.Left;
@@ -90,14 +93,18 @@ public class PacStudentController : MonoBehaviour
             case Direction.Right: newCol += 1; break;
         }
 
-        if (!LevelGenerator.IsWalkable(newRow, newCol))
+        if (!LevelGenerator.IsWalkablePlayer(newRow, newCol))
             return false;
+
+        if (!dustEffect.isPlaying)
+            dustEffect.Play();
         
         targetRow = newRow;
         targetCol = newCol;
         isLerping = true;
         lerpProgress = 0.0f;
 
+        animator.speed = 1f;
         SetAnimatorDirection(dir);
         StartMovementFeedback(newRow, newCol);
 
@@ -151,7 +158,7 @@ public class PacStudentController : MonoBehaviour
         bool aboutToEatPellet = (tile == 5 || tile == 6);
 
         if (aboutToEatPellet)
-            soundEffects.PlayEatPellet();
+            soundEffects.PlayCleaning();
         else
             soundEffects.PlayMoving();
 
@@ -160,6 +167,8 @@ public class PacStudentController : MonoBehaviour
 
     void StopMovementFeedback()
     {
-        // TODO: stop movement audio/dust particle effect when idle
+        soundEffects.SFXSource.Stop();
+        animator.speed = 0f;
+        dustEffect.Stop();
     }
 }
