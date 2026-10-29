@@ -24,7 +24,7 @@ public class MusicScript: MonoBehaviour
     public bool inGame = false;
     public bool goblinIsScared = false;
     public bool goblinIsDead = false;
-    public float gameAge = 0f;
+    public bool playingIntro = false;
 
     private AudioClip playingMusicClip;
 
@@ -38,8 +38,7 @@ public class MusicScript: MonoBehaviour
         playingMusicClip = clip;
         music.clip = clip;
         music.loop = true;
-        music.volume = volume;
-        //music.time = 0.8f;
+        music.volume = volume;   
         music.Play();
     }
     
@@ -51,10 +50,6 @@ public class MusicScript: MonoBehaviour
     
     void Update()
     {
-        if (inGame)
-        {
-            gameAge += Time.deltaTime;
-        }
 
         AudioClip chooseClip;
         float chooseVolume;
@@ -64,7 +59,7 @@ public class MusicScript: MonoBehaviour
             chooseClip = mainMenu;
             chooseVolume = mainMenuVolume;
         }
-        else if (gameAge < 3f)
+        else if (playingIntro)
         {
             chooseClip = sceneStart;
             chooseVolume = sceneStartVolume;

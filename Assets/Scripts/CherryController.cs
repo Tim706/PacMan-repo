@@ -5,6 +5,7 @@ public class CherryController : MonoBehaviour
 
     [Header("Cherry Object")] 
     public GameObject cherryPrefab;
+	public SoundEffectsScript soundEffects;
 
     [Header("Timing and Movement")] 
     public float respawnDelay = 5f;
@@ -18,6 +19,7 @@ public class CherryController : MonoBehaviour
     private Vector3 endPos;
     private float elapsedTime;
     private float totalDistance;
+	public bool canSpawn = false;
     
     void Start()
     {
@@ -26,6 +28,12 @@ public class CherryController : MonoBehaviour
     
     void Update()
     {
+
+		if (!canSpawn) 
+		{
+			return;
+		}
+		
         if (currentCherry != null)
         {
             MoveCherry();
@@ -73,6 +81,12 @@ public class CherryController : MonoBehaviour
         endPos = center + (center - startPos);
 
         currentCherry = Instantiate(cherryPrefab, startPos, Quaternion.identity);
+
+		CherryCollision collision = currentCherry.GetComponent<CherryCollision>();
+        if (collision != null)
+        {
+            collision.soundEffects = soundEffects;
+        }
 
         elapsedTime = 0f;
         totalDistance = Vector3.Distance(startPos, endPos);

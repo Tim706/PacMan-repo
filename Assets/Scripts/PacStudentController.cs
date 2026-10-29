@@ -23,6 +23,7 @@ public class PacStudentController : MonoBehaviour
     private enum Direction { Right, Left, Up, Down }
     private Direction lastInput = Direction.Right;
     private Direction currentInput = Direction.Right;
+    public bool canMove = false;
     
     private bool hasHitWall = false;
     private int tunnelLockRemaining = 0;
@@ -45,6 +46,12 @@ public class PacStudentController : MonoBehaviour
     
     void Update()
     {
+
+        if (!canMove)
+        {
+            return;
+        }
+        
         ScanInput();
 
         if (!isLerping)
