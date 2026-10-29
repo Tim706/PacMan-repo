@@ -6,7 +6,7 @@ public class IntroTimer : MonoBehaviour
 {
 
     [Header("IntroUI")]
-    public GameObject countDownBlock;
+    public GameObject screenBlocker;
     public TextMeshProUGUI countDownText;
 
     [Header("Connectors")] 
@@ -24,7 +24,7 @@ public class IntroTimer : MonoBehaviour
     {
         pacStudent.canMove = false;
 
-        countDownBlock.SetActive(true);
+        screenBlocker.SetActive(true);
         countDownText.gameObject.SetActive(true);
 
         musicScript.inGame = true;
@@ -37,7 +37,7 @@ public class IntroTimer : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        countDownBlock.SetActive(false);
+        screenBlocker.SetActive(false);
         countDownText.gameObject.SetActive(false);
         
         musicScript.playingIntro = false;

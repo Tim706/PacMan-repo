@@ -9,16 +9,26 @@ public class GameManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI scoreText;
     public GhostScaredTimerScript scaredTimerDisplay;
+	public GameObject[] healthBar;
+	public GameOverManager gameOverManager;
 
     [Header("Ghosts")]
     public Animator[] ghostAnimators; 
 
     [Header("Music")]
     public MusicScript musicScript;
+
+	[Header("Player")]
+	public PacStudentController pacStudent;
+	public ParticleSystem deathParticle;
     
     private int score = 0;
+	private int health = 3;
     private int[] ghostStates; 
     private Coroutine scaredCoroutine;
+
+	private int totalPellets;
+	private int pelletsEaten = 0;
 
     void Awake()
     {
@@ -33,7 +43,9 @@ public class GameManager : MonoBehaviour
         }
 
         ghostStates = new int[ghostAnimators.Length];
+		totalPellets = CountTotalPellets();
         UpdateScoreUI();
+		UpdateHealthUI();
     }
 
     public void AddScore(int amount)
@@ -42,10 +54,37 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
     }
 
+	public void PelletsEatenTracker()
+	{
+		pelletsEaten++;
+		if (pelletsEaten >= totalPellets)
+		{
+			gameOverManager.TriggerGameOver();
+		}
+	}
+
+	public void LoseHealth()
+	{
+		health--;
+		UpdateHealthUI();
+	}
+
+	public bool IsOutOfLives() => health <= 0;
+
     void UpdateScoreUI()
     {
         scoreText.text = score.ToString("D6");
     }
+
+	void  UpdateHealthUI()
+	{
+		for (int i = 0; i < healthBar.Length; i++)
+		{	
+			healthBar[i].SetActive(i < health);
+		}
+	}
+
+	public int GetScore() => score;
 
     public void ActivatePowerPill()
     {
@@ -98,4 +137,51 @@ public class GameManager : MonoBehaviour
             ghostAnimators[i].SetInteger("Ghost State", state);
         }
     }
+
+	void Start()
+	{
+    	
+	}
+
+	int CountTotalPellets()
+	{
+    	int count = 0;
+    	for (int r = 0; r < LevelGenerator.Rows; r++)
+    	{
+        	for (int c = 0; c < LevelGenerator.Cols; c++)
+        {
+
+        int tile = LevelGenerator.levelMap[r, c];
+        if (tile == 5 || tile == 6) count++;
+        }
+    }
+    return count;
+	}
+
+	public void HandlePacStudentDeath()
+	{
+    StartCoroutine(PacStudentDeathSequence());
+	}
+
+	IEnumerator PacStudentDeathSequence()
+	{
+    	pacStudent.canMove = false;
+    	deathParticle.Play();
+
+    	pacStudent.Die();
+    	LoseHealth();
+
+		yield return new WaitForSeconds(2f);
+
+		deathParticle.Stop();
+
+		if (IsOutOfLives())
+    	{
+        	gameOverManager.TriggerGameOver();
+    	}
+    	else
+    	{
+        	pacStudent.Respawn();
+		}
+	}
 }

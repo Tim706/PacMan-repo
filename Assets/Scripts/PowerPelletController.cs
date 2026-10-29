@@ -18,6 +18,7 @@ public class PowerPillController : MonoBehaviour
 
         LevelGenerator.MarkPelletEaten(row, col);
         GameManager.Instance.ActivatePowerPill();
+		GameManager.Instance.PelletsEatenTracker();
         Destroy(gameObject);
     }
     

@@ -32,8 +32,8 @@ public class PacStudentController : MonoBehaviour
     
     void Start()
     {
-        currentRow = 24;
-        currentCol = 14;
+        currentRow = 1;
+        currentCol = 1;
         
         transform.position = LevelGenerator.GridToWorld(currentRow, currentCol);
         
@@ -61,6 +61,11 @@ public class PacStudentController : MonoBehaviour
         else
         {
             ContinueLerp();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.L)) // L for "Lose life", temporary test key
+        {
+            GameManager.Instance.HandlePacStudentDeath();
         }
     }
 
@@ -223,6 +228,36 @@ public class PacStudentController : MonoBehaviour
         {
             soundEffects.PlayMoving();
         }
+    }
+    
+    public void Die()
+    {
+        canMove = false;
+        soundEffects.SFXSource.Stop();
+        dustEffect.Stop();
+        animator.speed = 1f; 
+        animator.SetBool("IsDead", true);
+        soundEffects.PlayDeath();
+    }
+
+    public void Respawn()
+    {
+        animator.SetBool("IsDead", false);
+
+        currentRow = 1;
+        currentCol = 1;
+        transform.position = LevelGenerator.GridToWorld(currentRow, currentCol);
+
+        lastInput = Direction.Right;
+        currentInput = Direction.Right;
+        SetAnimatorDirection(Direction.Right);
+
+        isLerping = false;
+        lerpProgress = 0f;
+        hasHitWall = false;
+        tunnelLockRemaining = 0;
+
+        canMove = true;
     }
 
     //void StopMovementFeedback()
