@@ -13,10 +13,11 @@ public class GameManager : MonoBehaviour
 	public GameOverManager gameOverManager;
 
     [Header("Ghosts")]
-    public Animator[] ghostAnimators; 
+    public GhostCollision[] ghosts; 
 
     [Header("Music")]
     public MusicScript musicScript;
+	public SoundEffectsScript soundEffects;
 
 	[Header("Player")]
 	public PacStudentController pacStudent;
@@ -24,11 +25,13 @@ public class GameManager : MonoBehaviour
     
     private int score = 0;
 	private int health = 3;
-    private int[] ghostStates; 
     private Coroutine scaredCoroutine;
 
 	private int totalPellets;
 	private int pelletsEaten = 0;
+
+	private bool scaredActive = false;
+	private bool recoveringActive = false;
 
     void Awake()
     {
@@ -41,8 +44,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        ghostStates = new int[ghostAnimators.Length];
+        
 		totalPellets = CountTotalPellets();
         UpdateScoreUI();
 		UpdateHealthUI();
@@ -102,6 +104,8 @@ public class GameManager : MonoBehaviour
     {
         SetGhostsState(1); 
         musicScript.goblinIsScared = true;
+		scaredActive = true;
+		recoveringActive = false;
 
         float timeRemaining = 10f;
         scaredTimerDisplay.scaredTimeRemaining = Mathf.CeilToInt(timeRemaining);
@@ -117,6 +121,7 @@ public class GameManager : MonoBehaviour
             {
                 SetGhostsState(2); 
                 recoveringTriggered = true;
+				recoveringActive = true;
             }
 
             yield return null;
@@ -126,16 +131,17 @@ public class GameManager : MonoBehaviour
         musicScript.goblinIsScared = false;
         scaredTimerDisplay.scaredTimeRemaining = 0;
         scaredCoroutine = null;
+		scaredActive = false;
+		recoveringActive = false;
     }
 
     void SetGhostsState(int state)
     {
-        for (int i = 0; i < ghostAnimators.Length; i++)
-        {
-            if (ghostStates[i] == 3) continue;
-            ghostStates[i] = state;
-            ghostAnimators[i].SetInteger("Ghost State", state);
-        }
+	    foreach (GhostCollision ghost in ghosts)
+	    {
+		    if (ghost.ghostState == 3) continue;
+		    ghost.SetState(state);
+	    }
     }
 
 	void Start()
@@ -184,4 +190,43 @@ public class GameManager : MonoBehaviour
         	pacStudent.Respawn();
 		}
 	}
+
+	public void HandleGhostEaten(GhostCollision ghost)
+	{
+		AddScore(300);
+		soundEffects.PlayCleanGoblin();
+		musicScript.goblinIsDead = true;
+
+		ghost.SetState(3);
+
+		StartCoroutine(GhostRespawnTimer(ghost));
+	}	
+
+	IEnumerator GhostRespawnTimer(GhostCollision ghost)
+	{	
+		
+    	yield return new WaitForSeconds(3f);
+	    
+    	int targetState;
+		if (!scaredActive)
+		{	
+	 		targetState = 0;
+		}	
+		else if (recoveringActive)
+		{
+			targetState = 2;
+		}
+		else
+		{
+			targetState = 1;
+		}
+
+    	ghost.SetState(targetState);
+
+	    bool anyGhostStillDead = System.Array.Exists(ghosts, g => g.ghostState == 3);
+   		if (!anyGhostStillDead)
+    		{
+        	musicScript.goblinIsDead = false;
+    		}
+	}	
 }

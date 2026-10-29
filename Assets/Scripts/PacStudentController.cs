@@ -40,8 +40,6 @@ public class PacStudentController : MonoBehaviour
         lastInput = Direction.Right;
         currentInput = Direction.Right;
         SetAnimatorDirection(Direction.Right);
-        //StopMovementFeedback();
-
     }
     
     void Update()
@@ -67,6 +65,17 @@ public class PacStudentController : MonoBehaviour
         {
             GameManager.Instance.HandlePacStudentDeath();
         }
+        
+		if (Input.GetKeyDown(KeyCode.K)) // K = test kill a random ghost
+		{
+    		GhostCollision[] allGhosts = FindObjectsByType<GhostCollision>(FindObjectsInactive.Exclude);
+    		if (allGhosts.Length > 0)
+    		{
+        		GhostCollision randomGhost = allGhosts[Random.Range(0, allGhosts.Length)];
+        		randomGhost.ghostState = 1;
+        		GameManager.Instance.HandleGhostEaten(randomGhost);
+    		}
+		}
     }
 
     void ScanInput()
@@ -259,11 +268,4 @@ public class PacStudentController : MonoBehaviour
 
         canMove = true;
     }
-
-    //void StopMovementFeedback()
-    //{
-        //soundEffects.SFXSource.Stop();
-        //animator.speed = 0f;
-        //dustEffect.Stop();
-    //}
 }
