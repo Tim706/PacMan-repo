@@ -64,15 +64,15 @@ public class MusicScript: MonoBehaviour
             chooseClip = sceneStart;
             chooseVolume = sceneStartVolume;
         }
+		 else if (goblinIsDead)
+        {
+            chooseClip = goblinDead;
+            chooseVolume = goblinDeadVolume;
+        }
         else if (goblinIsScared)
         {
             chooseClip = goblinScared;
             chooseVolume = goblinScaredVolume;
-        }
-        else if (goblinIsDead)
-        {
-            chooseClip = goblinDead;
-            chooseVolume = goblinDeadVolume;
         }
         else
         {
